@@ -8,7 +8,7 @@ if __name__ == "__main__":
         correct_difficulty_value = False
         difficulty_mode = ["easy", "medium", "hard"]
         type_question = 'multiple'
-        categories_book = {"Geography": 22, "History" : 23, "General Knowledge": 9, "Sciences : Computer": 18}
+        categories_book = {"Geography": 22, "History": 23, "General Knowledge": 9, "Sciences : Computer": 18}
         categories_name = ["Geography", "History", "General Knowledge", "Sciences : Computer"]
         categories_value = False
         print("Welcome to Lucien's Quizz, choose a category :")
@@ -55,6 +55,3 @@ if __name__ == "__main__":
             print('Thanks for playing')
 
 play_game()
-
-
-

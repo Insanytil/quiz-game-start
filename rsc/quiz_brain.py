@@ -1,12 +1,17 @@
 import html
 import random
+from rsc_song import music
 
 
 class QuizBrain:
+    """
+    objet quiz permettant de créer un nouveau quiz pour jouer
+    """
     def __init__(self, q_list):
         self.q_number = 0
         self.q_list = q_list
         self.q_score = 0
+        self.music = music.Music()
 
     def next_question(self):
         current_question = self.q_list[self.q_number]
@@ -23,7 +28,7 @@ class QuizBrain:
             if user_answer > len(answers):
                 raise ValueError
         except ValueError:
-            print('Veuillez introduire un nombre valide')
+            print('Please enter valid number')
             return self.next_question()
         self.q_number += 1
 
@@ -35,8 +40,10 @@ class QuizBrain:
     def checking_answer(self, user_answer, answer, question_answer):
         if user_answer - 1 == answer.index(html.unescape(question_answer)):
             print('Correct.')
+            self.music.play_correct_sound()
             self.q_score += 1
         else:
+            self.music.play_wrong_sound()
             print('Wrong.')
 
         print(f"""
