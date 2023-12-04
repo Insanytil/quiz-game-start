@@ -1,11 +1,15 @@
 import pygame
 
 
-import pygame
-
-
 class Music:
+    """
+    Initialise une class Music
+    """
     def __init__(self):
+        """
+        PRE :
+        POST : Initialise la class avec les chemins des fichiers audio depuis la racine du fichier main
+        """
         self.correct_song_path = "rsc_song/correct-6033.mp3"
         self.wrong_song_path = "rsc_song/negative_beeps-6008.mp3"
         self.volume = 0.2

@@ -5,9 +5,20 @@ from rsc_song import music
 
 class QuizBrain:
     """
-    objet quiz permettant de créer un nouveau quiz pour jouer
+    Créer un nouveau quiz pour jouer
     """
-    def __init__(self, q_list):
+# Initialisation des constantes nécessaires
+    CORRECT_ANSWER_TAG = 'correct_answer'
+    INCORRECT_ANSWER_TAG = 'incorrect_answers'
+    QUESTION_TAG = 'question'
+
+    def __init__(self, q_list: list[object]):
+        """
+        initialise le un nouveau quiz
+        PRE : - q_list :
+
+
+        """
         self.q_number = 0
         self.q_list = q_list
         self.q_score = 0
@@ -15,12 +26,12 @@ class QuizBrain:
 
     def next_question(self):
         current_question = self.q_list[self.q_number]
-        answers = [html.unescape(current_question['correct_answer'])]
-        for i in current_question['incorrect_answers']:
+        answers = [html.unescape(current_question[self.CORRECT_ANSWER_TAG])]
+        for i in current_question[self.INCORRECT_ANSWER_TAG]:
             answers.append(html.unescape(i))
         random.shuffle(answers)
 
-        print(f"Question {self.q_number + 1}: {html.unescape(current_question['question'])}")
+        print(f"Question {self.q_number + 1}: {html.unescape(current_question[self.QUESTION_TAG])}")
         for index, item in enumerate(answers):
             print(f"   {index + 1} : {item}\n")
         try:
@@ -32,7 +43,7 @@ class QuizBrain:
             return self.next_question()
         self.q_number += 1
 
-        return self.checking_answer(user_answer, answers, html.unescape(current_question['correct_answer']))
+        return self.checking_answer(user_answer, answers, html.unescape(current_question[self.CORRECT_ANSWER_TAG]))
 
     def is_not_last_question(self) -> bool:
         return len(self.q_list) > self.q_number
