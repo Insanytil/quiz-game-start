@@ -3,12 +3,18 @@ from rsc .quiz_brain import QuizBrain
 
 if __name__ == "__main__":
     def play_game():
+        """
+        Initialise les paramètres en récoltant les données nécessaires au jeu et le joue
+        :return:
+        """
         correct_amount_value: bool = False
         correct_difficulty_value: bool = False
         difficulty_mode: tuple = ("easy", "medium", "hard")
         type_question: str = 'multiple'
-        categories_book: object = {"Geography": 22, "History": 23, "General Knowledge": 9, "Sciences : Computer": 18}
-        categories_name: tuple = ("Geography", "History", "General Knowledge", "Sciences : Computer")
+        categories_book: object = \
+            {"Geography": 22, "History": 23, "General Knowledge": 9, "Sciences : Computer": 18}
+        categories_name: tuple = \
+            ("Geography", "History", "General Knowledge", "Sciences : Computer")
         categories_value: bool = False
 
         print("Welcome to Lucien's Quizz, choose a category :")
@@ -28,14 +34,16 @@ if __name__ == "__main__":
 
         while not correct_amount_value:
             try:
-                user_amount: int = int(input('How many questions do you like to have in your quizz :\n>>> '))
+                user_amount: int = (int
+                    (input('How many questions do you like to have in your quizz :\n>>> ')))
                 correct_amount_value = True
             except ValueError:
                 print('Please insert a valid number.')
 
         while not correct_difficulty_value:
             try:
-                user_difficulty: str = input('Choose a difficulty : [Easy/Medium/Hard]\n>>> ').lower()
+                user_difficulty: str = (input
+                    ('Choose a difficulty : [Easy/Medium/Hard]\n>>> ').lower())
                 if user_difficulty in difficulty_mode:
                     correct_difficulty_value = True
                 else:

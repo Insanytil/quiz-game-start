@@ -15,8 +15,8 @@ class Data:
              - categ : int représentant le nombre définissant la catégorie choisie par le joueur
         
 
-        POST: Initialise un objet data qui permettra d'être utilisée par le quizzBrain si les valeurs ont
-        été correctement introduites dans le pré
+        POST: Initialise un objet data qui permettra d'être utilisée par le quizzBrain si les
+        valeurs ont été correctement introduites dans le pré
         """
         self.amount = amount
         self.difficulty = difficulty
@@ -27,14 +27,14 @@ class Data:
         """
         Effectue une requête http (get) pour récuperer des données en format JSON
         """
-        # Utilisation de la lib requests pour pouvoir addresser une requête web au serveur de opendb.com afin
-        # de générer une API et récolter des données utilisables pour le quizz
+# Utilisation de la lib requests pour pouvoir addresser
+# une requête web au serveur de opendb.com afin
+# de générer une API et récolter des données utilisables pour le quizz
         response = requests.get(f"https://opentdb.com/api.php?"
-                                f"amount={self.amount}&category={self.categorie}&difficulty={self.difficulty}"
-                                f"&type={self.type_question}")
+            f"amount={self.amount}&category={self.categorie}&difficulty={self.difficulty}"
+            f"&type={self.type_question}", timeout=15)
         if response.status_code == 200:
             open_trivia_data = json.loads(response.text)
             return open_trivia_data['results']
-        else:
-            print(f"Erreur lors de la récupération des questions: {response.status_code}")
-            return None
+        print(f"Erreur lors de la récupération des questions: {response.status_code}")
+        return None

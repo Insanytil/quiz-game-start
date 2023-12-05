@@ -14,8 +14,11 @@ class QuizBrain:
 
     def __init__(self, q_list: list[object]):
         """
-        initialise le un nouveau quiz
-        PRE : - q_list :
+        initialise  un nouveau quiz
+        PRE : - q_list : reçoit une liste d'objets
+        POST : Initialise un objet qui reçoit une liste d'objet,
+               la liste reçue doit être formatée de manière spécifique (clés/valeurs)
+               afin que le quizz brain puisse les utiliser
 
 
         """
@@ -25,13 +28,18 @@ class QuizBrain:
         self.__music = music.Music()
 
     def next_question(self):
+        '''
+        Charge la question suivante ainsi que ses propositions
+
+        '''
         current_question = self.__q_list[self.__q_number]
         answers = [html.unescape(current_question[self.CORRECT_ANSWER_TAG])]
         for i in current_question[self.INCORRECT_ANSWER_TAG]:
             answers.append(html.unescape(i))
         random.shuffle(answers)
 
-        print(f"Question {self.__q_number + 1}: {html.unescape(current_question[self.QUESTION_TAG])}")
+        print(f"Question {self.__q_number + 1}: "
+              f"{html.unescape(current_question[self.QUESTION_TAG])}")
         for index, item in enumerate(answers):
             print(f"   {index + 1} : {item}\n")
         try:
@@ -42,13 +50,26 @@ class QuizBrain:
             print('Please enter valid number')
             return self.next_question()
         self.__q_number += 1
-
-        return self.checking_answer(user_answer, answers, html.unescape(current_question[self.CORRECT_ANSWER_TAG]))
+        return self.checking_answer(
+            user_answer, answers, html.unescape(current_question[self.CORRECT_ANSWER_TAG]))
 
     def is_not_last_question(self) -> bool:
+        '''
+        Vérifie si il y a encore une question
+        :return: true / false
+        '''
         return len(self.__q_list) > self.__q_number
 
     def checking_answer(self, user_answer, answer, question_answer):
+        '''
+        PRE : Recoit l'input int du user avec liste de réponse possible et la réponse correcte
+        de la question
+        :param user_answer: int
+        :param answer: str
+        :param question_answer: str
+        POST : Affiche si la réponse donnée est correcte ou non par rapport aux paramètres reçu
+        :return: None
+        '''
         if user_answer - 1 == answer.index(html.unescape(question_answer)):
             print('Correct.')
             self.__music.play_correct_sound()
@@ -64,12 +85,15 @@ class QuizBrain:
         """)
 
     def show_final_score(self):
+        '''
+        Affiche le score final 
+        '''
         if self.__q_score == self.__q_number:
             print(f"""
             You've completed the quizz with a score of {self.__q_score}/{self.__q_number}.
             What a stunning performance ! Congratulations. """)
 
-        if self.__q_number > self.__q_score >= (self.__q_number / 10)*8:
+        if self.__q_number > self.__q_score >= (self.__q_number / 10) * 8:
             print(f"""
             You've completed the quizz with a score of {self.__q_score}/{self.__q_number}.
             It was almost perfect ! Congratulations. """)
