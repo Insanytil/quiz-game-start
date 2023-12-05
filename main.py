@@ -36,9 +36,12 @@ if __name__ == "__main__":
             try:
                 user_amount: int = (int
                     (input('How many questions do you like to have in your quizz :\n>>> ')))
+                if user_amount == 0:
+                    raise ValueError
                 correct_amount_value = True
+
             except ValueError:
-                print('Please insert a valid number.')
+                print('Please insert a valid number (minimum is 1).')
 
         while not correct_difficulty_value:
             try:

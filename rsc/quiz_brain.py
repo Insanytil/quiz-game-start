@@ -44,10 +44,10 @@ class QuizBrain:
             print(f"   {index + 1} : {item}\n")
         try:
             user_answer = int(input("Enter the number of the answer : "))
-            if user_answer > len(answers):
+            if user_answer > len(answers) or user_answer == 0:
                 raise ValueError
         except ValueError:
-            print('Please enter valid number')
+            print('Please enter valid number [1/2/3/4]')
             return self.next_question()
         self.__q_number += 1
         return self.checking_answer(
@@ -56,7 +56,7 @@ class QuizBrain:
     def is_not_last_question(self) -> bool:
         '''
         Vérifie si il y a encore une question
-        :return: true / false
+        :return: bool
         '''
         return len(self.__q_list) > self.__q_number
 
@@ -86,7 +86,7 @@ class QuizBrain:
 
     def show_final_score(self):
         '''
-        Affiche le score final 
+        Affiche le message de  score final en fonction du score
         '''
         if self.__q_score == self.__q_number:
             print(f"""
