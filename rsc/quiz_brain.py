@@ -15,50 +15,51 @@ class QuizBrain:
     def __init__(self, q_list: list[object]):
         """
         initialise  un nouveau quiz
-        PRE : - q_list : reçoit une liste d'objets
+        PRE : - q_list : reçoit une liste d'objets qui doit correspondre à un format spécifique 
         POST : Initialise un objet qui reçoit une liste d'objet,
                la liste reçue doit être formatée de manière spécifique (clés/valeurs)
                afin que le quizz brain puisse les utiliser
+               définit les valeurs des paramètres suivant
+               cela permettra d'afficher correctement les informations pour le joueur
 
 
         """
-        self.__q_number = 0
-        self.__q_list = q_list
-        self.__q_score = 0
-        self.__music = music.Music()
+        self.q_number = 0
+        self.q_list = q_list
+        self.q_score = 0
+        self.music = music.Music()
 
     def next_question(self):
         '''
+        PRE: q_list doit être une liste d'objets à format spécifique
         Charge la question suivante ainsi que ses propositions
 
         '''
-        current_question = self.__q_list[self.__q_number]
+        current_question = self.q_list[self.q_number]
         answers = [html.unescape(current_question[self.CORRECT_ANSWER_TAG])]
         for i in current_question[self.INCORRECT_ANSWER_TAG]:
             answers.append(html.unescape(i))
         random.shuffle(answers)
 
-        print(f"Question {self.__q_number + 1}: "
+        print(f"Question {self.q_number + 1}: "
               f"{html.unescape(current_question[self.QUESTION_TAG])}")
         for index, item in enumerate(answers):
             print(f"   {index + 1} : {item}\n")
-        try:
-            user_answer = int(input("Enter the number of the answer : "))
-            if user_answer > len(answers) or user_answer == 0:
-                raise ValueError
-        except ValueError:
-            print('Please enter valid number [1/2/3/4]')
-            return self.next_question()
-        self.__q_number += 1
-        return self.checking_answer(
+        user_answer = int(input("Enter the number of the answer : "))
+
+        if user_answer <= len(answers) and user_answer > 0:
+            self.q_number += 1
+            return self.checking_answer(
             user_answer, answers, html.unescape(current_question[self.CORRECT_ANSWER_TAG]))
+        else:
+            raise ValueError
 
     def is_not_last_question(self) -> bool:
         '''
         Vérifie si il y a encore une question
         :return: bool
         '''
-        return len(self.__q_list) > self.__q_number
+        return len(self.q_list) > self.q_number
 
     def checking_answer(self, user_answer, answer, question_answer):
         '''
@@ -68,19 +69,21 @@ class QuizBrain:
         :param answer: str
         :param question_answer: str
         POST : Affiche si la réponse donnée est correcte ou non par rapport aux paramètres reçu
+                Incrément la valeur de self.__q_score si la réponse donnée est correcte
+                Joue un son en fonction de la réponse donnée (correcte ou non)
         :return: None
         '''
         if user_answer - 1 == answer.index(html.unescape(question_answer)):
             print('Correct.')
-            self.__music.play_correct_sound()
-            self.__q_score += 1
+            self.music.play_correct_sound()
+            self.q_score += 1
         else:
-            self.__music.play_wrong_sound()
+            self.music.play_wrong_sound()
             print('Wrong.')
 
         print(f"""
-        The correct answer is {question_answer}.
-        Your actual score is {self.__q_score}/{self.__q_number}.
+        The correct answer is \033[32m{question_answer}\033[0m.
+        Your actual score is {self.q_score}/{self.q_number}.
         
         """)
 
@@ -88,29 +91,29 @@ class QuizBrain:
         '''
         Affiche le message de  score final en fonction du score
         '''
-        if self.__q_score == self.__q_number:
+        if self.q_score == self.q_number:
             print(f"""
-            You've completed the quizz with a score of {self.__q_score}/{self.__q_number}.
+            You have completed the quizz with a score of {self.q_score}/{self.q_number}.
             What a stunning performance ! Congratulations. """)
 
-        if self.__q_number > self.__q_score >= (self.__q_number / 10) * 8:
+        if self.q_number > self.q_score >= (self.q_number / 10) * 8:
             print(f"""
-            You've completed the quizz with a score of {self.__q_score}/{self.__q_number}.
+            You have completed the quizz with a score of {self.q_score}/{self.q_number}.
             It was almost perfect ! Congratulations. """)
 
-        if (self.__q_number / 10) * 8 > self.__q_score > (self.__q_number / 10) * 5:
+        if (self.q_number / 10) * 8 > self.q_score > (self.q_number / 10) * 5:
             print(f"""
-            You've completed the quizz with a score of {self.__q_score}/{self.__q_number}.
-            More than one question in two correct, if it were an exam you'd probably have passed !
+            You have completed the quizz with a score of {self.q_score}/{self.q_number}.
+            More than one question in two correct, if it were an exam you would  probably have passed !
             Congratulations. """)
 
-        if (self.__q_number / 10) * 5 == self.__q_score:
+        if (self.q_number / 10) * 5 == self.q_score:
             print(f"""
-            You've completed the quizz with a score of {self.__q_score}/{self.__q_number}.
+            You have completed the quizz with a score of {self.q_score}/{self.q_number}.
             Just the Half... Not good, not bad !
             Congratulations. """)
-        if (self.__q_number / 2) > self.__q_score:
+        if (self.q_number / 2) > self.q_score:
             print(f"""
-            You've completed the quizz with a score of {self.__q_score}/{self.__q_number}.
-            Ouch not even the half, you'll do better next time don't worry  !
+            You have completed the quizz with a score of {self.q_score}/{self.q_number}.
+            Ouch not even the half, you will do better next time do not worry  !
             Congratulations. """)

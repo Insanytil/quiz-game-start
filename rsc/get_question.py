@@ -2,7 +2,7 @@ import json
 import requests
 
 
-class Data:
+class GetQuestion:
     """
     Défini les datas nécessaires pour jouer
     
@@ -13,10 +13,11 @@ class Data:
              - difficulty : str représentant le choix de le difficulté par le joueur
              - type_question : str représentant le type de question (qcm only pour le moment)
              - categ : int représentant le nombre définissant la catégorie choisie par le joueur
+             
         
 
-        POST: Initialise un objet data qui permettra d'être utilisée par le quizzBrain si les
-        valeurs ont été correctement introduites dans le pré
+        POST: Initialise un objet data qui permettra d'être utilisé correctement par le quizzBrain 
+              si les valeurs ont été correctement introduites dans le pré
         """
         self.amount = amount
         self.difficulty = difficulty
@@ -26,15 +27,23 @@ class Data:
     def get_random_questions(self):
         """
         Effectue une requête http (get) pour récuperer des données en format JSON
+        PRE : A besoin d'avoir accès aux serveurs de opentdb grâce à l'API
+        POST: Si la requête s'est déroulée sans problème, renvoie une liste d'objet
         """
 # Utilisation de la lib requests pour pouvoir addresser
 # une requête web au serveur de opendb.com afin
 # de générer une API et récolter des données utilisables pour le quizz
-        response = requests.get(f"https://opentdb.com/api.php?"
-            f"amount={self.amount}&category={self.categorie}&difficulty={self.difficulty}"
-            f"&type={self.type_question}", timeout=15)
-        if response.status_code == 200:
-            open_trivia_data = json.loads(response.text)
-            return open_trivia_data['results']
-        print(f"Erreur lors de la récupération des questions: {response.status_code}")
-        return None
+        try:
+            response = requests.get(f"https://opentdb.com/api.php?"
+                f"amount={self.amount}&category={self.categorie}&difficulty={self.difficulty}"
+                f"&type={self.type_question}", timeout=15)
+            if response.status_code == 200:
+                open_trivia_data = json.loads(response.text)
+                return open_trivia_data['results']
+            else :
+                print(f"Erreur lors de la récupération des questions: {response.status_code}")
+                return None
+
+        except Exception as e:
+            print(f"Erreur de connexion: {e}")
+            return None
